@@ -57,6 +57,8 @@ import (
 	"github.com/DNAProject/DNA/txnpool/proc"
 	"github.com/DNAProject/DNA/validator/stateful"
 	"github.com/DNAProject/DNA/validator/stateless"
+	"path/filepath"
+
 	"github.com/ethereum/go-ethereum/common/fdlimit"
 	"github.com/ontio/ontology-crypto/keypair"
 	alog "github.com/ontio/ontology-eventbus/log"
@@ -206,6 +208,9 @@ func initLog(ctx *cli.Context) {
 	if disableLogFile {
 		log.InitLog(logLevel, log.Stdout)
 	} else {
+		dataDir := ctx.String(utils.GetFlagName(utils.DataDirFlag))
+		temp := filepath.Join(dataDir, "Log")
+		log.PATH = temp + string(os.PathSeparator)
 		alog.InitLog(log.PATH)
 		log.InitLog(logLevel, log.PATH, log.Stdout)
 	}
