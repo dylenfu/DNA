@@ -26,6 +26,7 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"runtime"
 	"strings"
 	"syscall"
@@ -57,7 +58,6 @@ import (
 	"github.com/DNAProject/DNA/txnpool/proc"
 	"github.com/DNAProject/DNA/validator/stateful"
 	"github.com/DNAProject/DNA/validator/stateless"
-	"path/filepath"
 
 	"github.com/ethereum/go-ethereum/common/fdlimit"
 	"github.com/ontio/ontology-crypto/keypair"
@@ -89,6 +89,7 @@ func setupAPP() *cli.App {
 		//common setting
 		utils.ConfigFlag,
 		utils.LogLevelFlag,
+		utils.LogDirFlag,
 		utils.DisableLogFileFlag,
 		utils.DisableEventLogFlag,
 		utils.DataDirFlag,
@@ -208,11 +209,10 @@ func initLog(ctx *cli.Context) {
 	if disableLogFile {
 		log.InitLog(logLevel, log.Stdout)
 	} else {
-		dataDir := ctx.String(utils.GetFlagName(utils.DataDirFlag))
-		temp := filepath.Join(dataDir, "Log")
-		log.PATH = temp + string(os.PathSeparator)
-		alog.InitLog(log.PATH)
-		log.InitLog(logLevel, log.PATH, log.Stdout)
+		logFileDir := ctx.GlobalString(utils.GetFlagName(utils.LogDirFlag))
+		logFileDir = filepath.Join(logFileDir, "") + string(os.PathSeparator)
+		alog.InitLog(logFileDir)
+		log.InitLog(logLevel, logFileDir, log.Stdout)
 	}
 }
 

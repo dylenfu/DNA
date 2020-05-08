@@ -25,6 +25,7 @@ import (
 	"strings"
 
 	"github.com/DNAProject/DNA/common/config"
+	"github.com/DNAProject/DNA/common/log"
 	"github.com/DNAProject/DNA/smartcontract/service/neovm"
 	"github.com/urfave/cli"
 )
@@ -51,6 +52,11 @@ var (
 	DisableLogFileFlag = cli.BoolFlag{
 		Name:  "disable-log-file",
 		Usage: "Discard log output to file",
+	}
+	LogDirFlag = cli.StringFlag{
+		Name:  "log-dir",
+		Usage: "log output to the file",
+		Value: log.PATH,
 	}
 	DisableEventLogFlag = cli.BoolFlag{
 		Name:  "disable-event-log",
