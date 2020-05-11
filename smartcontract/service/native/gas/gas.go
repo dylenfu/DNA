@@ -123,7 +123,7 @@ func GasTransfer(native *native.NativeService) ([]byte, error) {
 			continue
 		}
 		if v.Value > constants.GAS_TOTAL_SUPPLY {
-			return utils.BYTE_FALSE, fmt.Errorf("transfer ont amount:%d over totalSupply:%d", v.Value, constants.GAS_TOTAL_SUPPLY)
+			return utils.BYTE_FALSE, fmt.Errorf("transfer gas amount:%d over totalSupply:%d", v.Value, constants.GAS_TOTAL_SUPPLY)
 		}
 		if _, _, err := Transfer(native, contract, &v); err != nil {
 			return utils.BYTE_FALSE, err
@@ -159,7 +159,7 @@ func GasApprove(native *native.NativeService) ([]byte, error) {
 	var state State
 	source := common.NewZeroCopySource(native.Input)
 	if err := state.Deserialization(source); err != nil {
-		return utils.BYTE_FALSE, errors.NewDetailErr(err, errors.ErrNoCode, "[OngApprove] state deserialize error!")
+		return utils.BYTE_FALSE, errors.NewDetailErr(err, errors.ErrNoCode, "[GasApprove] state deserialize error!")
 	}
 	if state.Value > constants.GAS_TOTAL_SUPPLY {
 		return utils.BYTE_FALSE, fmt.Errorf("approve amount:%d over totalSupply:%d", state.Value, constants.GAS_TOTAL_SUPPLY)
