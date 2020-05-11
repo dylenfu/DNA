@@ -57,6 +57,24 @@ func makeTransfer(native *native.NativeService, from, to common.Address, value u
 	return err
 }
 
+func getAllowance(native *native.NativeService, addr common.Address) int {
+	sink := common.NewZeroCopySink(nil)
+	utils.EncodeAddress(sink, addr)
+	native.Input = sink.Bytes()
+	buf, _ := gas.GasAllowance(native)
+	val := common.BigIntFromNeoBytes(buf)
+	return int(val.Uint64())
+}
+
+func setApprove(native *native.NativeService, from, to common.Address, value uint64) error {
+	native.Tx.SignedAddr = append(native.Tx.SignedAddr, from)
+
+	native.Input = common.SerializeToBytes(&gas.State{from, to, value})
+
+	_, err := gas.GasApprove(native)
+	return err
+}
+
 func TestTransfer(t *testing.T) {
 	InvokeNativeContract(t, utils.GasContractAddress, func(native *native.NativeService) ([]byte, error) {
 		a := RandomAddress()
@@ -75,6 +93,29 @@ func TestTransfer(t *testing.T) {
 		assert.Nil(t, makeTransfer(native, b, c, 10))
 		assert.Equal(t, getBalanceOf(native, b), 0)
 		assert.Equal(t, getBalanceOf(native, c), 10)
+
+		return nil, nil
+	})
+}
+
+func TestTotalAllowance(t *testing.T) {
+	InvokeNativeContract(t, utils.GasContractAddress, func(native *native.NativeService) ([]byte, error) {
+		a := RandomAddress()
+		b := RandomAddress()
+		c := RandomAddress()
+		setBalance(native.CacheDB, a, 10000)
+
+		assert.Equal(t, getBalanceOf(native, a), 10000)
+		assert.Equal(t, getBalanceOf(native, b), 0)
+		assert.Equal(t, getBalanceOf(native, c), 0)
+
+		assert.Nil(t, setApprove(native, a, b, 10))
+		assert.Equal(t, getAllowance(native, a), 10)
+		assert.Equal(t, getAllowance(native, b), 0)
+
+		assert.Nil(t, setApprove(native, a, c, 100))
+		assert.Equal(t, getAllowance(native, a), 110)
+		assert.Equal(t, getAllowance(native, c), 0)
 
 		return nil, nil
 	})
