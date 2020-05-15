@@ -656,16 +656,16 @@ func (pool *BlockPool) setBlockSealed(block *Block, forEmpty bool, sigdata bool)
 	if !forEmpty {
 		// remove empty block
 		c.SealedBlock = &Block{
-			Block:               block.Block,
-			Info:                block.Info,
-			PrevBlockMerkleRoot: block.PrevBlockMerkleRoot,
+			Block:              block.Block,
+			Info:               block.Info,
+			PrevExecMerkleRoot: block.PrevExecMerkleRoot,
 		}
 	} else {
 		// replace with empty block
 		c.SealedBlock = &Block{
-			Block:               block.EmptyBlock,
-			Info:                block.Info,
-			PrevBlockMerkleRoot: block.PrevBlockMerkleRoot,
+			Block:              block.EmptyBlock,
+			Info:               block.Info,
+			PrevExecMerkleRoot: block.PrevExecMerkleRoot,
 		}
 	}
 
