@@ -70,4 +70,5 @@ type LedgerStore interface {
 	PreExecuteContractBatch(txes []*types.Transaction, atomic bool) ([]*cstates.PreExecResult, uint32, error)
 	GetEventNotifyByTx(tx common.Uint256) (*event.ExecuteNotify, error)
 	GetEventNotifyByBlock(height uint32) ([]*event.ExecuteNotify, error)
+	EnableBlockPrune(numBeforeCurr uint32)
 }

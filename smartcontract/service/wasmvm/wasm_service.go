@@ -22,7 +22,6 @@ package wasmvm
 
 import (
 	"github.com/DNAProject/DNA/common"
-	"github.com/DNAProject/DNA/core/store"
 	"github.com/DNAProject/DNA/core/types"
 	"github.com/DNAProject/DNA/errors"
 	"github.com/DNAProject/DNA/smartcontract/context"
@@ -34,7 +33,6 @@ import (
 )
 
 type WasmVmService struct {
-	Store         store.LedgerStore
 	CacheDB       *storage.CacheDB
 	ContextRef    context.ContextRef
 	Notifications []*event.NotifyEventInfo

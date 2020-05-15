@@ -147,10 +147,6 @@ func (self *Ledger) IsContainBlock(blockHash common.Uint256) (bool, error) {
 	return self.ldgStore.IsContainBlock(blockHash)
 }
 
-func (self *Ledger) GetCurrentStateRoot() (common.Uint256, error) {
-	return common.Uint256{}, nil
-}
-
 func (self *Ledger) GetBookkeeperState() (*states.BookkeeperState, error) {
 	return self.ldgStore.GetBookkeeperState()
 }
@@ -196,4 +192,8 @@ func (self *Ledger) GetEventNotifyByBlock(height uint32) ([]*event.ExecuteNotify
 
 func (self *Ledger) Close() error {
 	return self.ldgStore.Close()
+}
+
+func (self *Ledger) EnableBlockPrune(numBeforeCurr uint32) {
+	self.ldgStore.EnableBlockPrune(numBeforeCurr)
 }
